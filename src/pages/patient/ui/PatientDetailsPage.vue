@@ -579,11 +579,13 @@ function goBack() {
   display: flex;
   gap: 16px;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .visit-card {
   border-left: 4px solid #212121;
   flex: 1;
+  min-width: 0;
 }
 
 .templates-panel-wrapper {
@@ -591,12 +593,7 @@ function goBack() {
   top: 80px;
   max-height: calc(100vh - 120px);
   flex-shrink: 0;
-}
-
-.templates-panel-wrapper {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 120px);
+  width: 320px;
 }
 
 .visit-card:hover {
@@ -727,6 +724,17 @@ function goBack() {
   .content-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .visit-card-wrapper.editing {
+    flex-direction: column;
+  }
+
+  .templates-panel-wrapper {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: 16px;
   }
 }
 </style>

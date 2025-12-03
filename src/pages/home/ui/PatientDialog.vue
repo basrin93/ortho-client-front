@@ -194,12 +194,12 @@ function close() {
       <v-divider></v-divider>
 
       <v-card-actions class="dialog-actions">
-        <v-spacer></v-spacer>
         <v-btn 
           variant="text" 
           rounded="lg" 
           size="large"
           @click="close"
+          class="cancel-button"
         >
           Отмена
         </v-btn>
@@ -212,8 +212,8 @@ function close() {
           @click="save"
           class="save-button"
         >
-          <v-icon class="mr-2">mdi-check</v-icon>
-          {{ isEditing ? 'Сохранить изменения' : 'Создать пациента' }}
+          <v-icon class="mr-2 save-icon">mdi-check</v-icon>
+          <span class="save-text">{{ isEditing ? 'Сохранить изменения' : 'Создать пациента' }}</span>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -308,6 +308,19 @@ function close() {
 .dialog-actions {
   padding: 24px 32px;
   background: #fafafa;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cancel-button {
+  flex: 1;
+  min-width: 0;
+}
+
+.save-button {
+  flex: 1;
+  min-width: 0;
 }
 
 .save-button {
@@ -343,7 +356,23 @@ function close() {
   }
 
   .dialog-actions {
-    padding: 20px 24px;
+    padding: 16px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cancel-button,
+  .save-button {
+    width: 100%;
+    flex: none;
+  }
+
+  .save-text {
+    display: inline;
+  }
+
+  .save-icon {
+    margin-right: 8px !important;
   }
 
   .header-icon {
@@ -353,6 +382,16 @@ function close() {
 
   .dialog-title {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .save-text {
+    font-size: 14px;
+  }
+
+  .save-icon {
+    margin-right: 4px !important;
   }
 }
 

@@ -1,13 +1,52 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/entities/user/model/store'
+import { useDisplay } from 'vuetify'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const { mobile } = useDisplay()
 
 const drawer = ref(true)
+const isMobile = computed(() => mobile.value)
+
+// На мобильных устройствах меню закрыто по умолчанию
+onMounted(() => {
+  if (isMobile.value) {
+    drawer.value = false
+  }
+})
+
+// Экспортируем функцию для переключения меню
+const toggleDrawer = () => {
+  drawer.value = !drawer.value
+}
+
+// Закрываем меню при навигации на мобильных
+const navigateTo = (routePath: string) => {
+  router.push(routePath)
+  if (isMobile.value) {
+    drawer.value = false
+  }
+}
+
+// Закрываем меню при клике вне его на мобильных
+const closeDrawer = () => {
+  if (isMobile.value) {
+    drawer.value = false
+  }
+}
+
+// Определяем, должен ли drawer быть permanent (только на десктопе)
+const isPermanent = computed(() => !isMobile.value)
+
+// Экспортируем drawer для использования в родительском компоненте
+defineExpose({
+  toggleDrawer,
+  drawer
+})
 
 // Навигационные пункты меню
 const navItems = [
@@ -23,10 +62,6 @@ const isActive = (itemRoute: string) => {
   return route.path === itemRoute || route.path.startsWith(itemRoute + '/')
 }
 
-// Переход по маршруту
-function navigateTo(routePath: string) {
-  router.push(routePath)
-}
 
 // Выход из системы
 async function handleLogout() {
@@ -36,12 +71,21 @@ async function handleLogout() {
 </script>
 
 <template>
+  <!-- Overlay для мобильных устройств -->
+  <div 
+    v-if="isMobile && drawer" 
+    class="sidebar-overlay"
+    @click="closeDrawer"
+  ></div>
+  
   <v-navigation-drawer
     v-model="drawer"
     elevation="0"
-    permanent
+    :permanent="isPermanent"
+    :temporary="isMobile"
     width="280"
     class="sidebar"
+    location="left"
   >
     <!-- Логотип и название -->
     <div class="sidebar-logo">
@@ -145,7 +189,7 @@ async function handleLogout() {
         :value="item.route"
         rounded="xl"
         class="nav-item"
-        @click="navigateTo(item.route)"
+        @click="() => navigateTo(item.route)"
       >
         <template v-slot:prepend>
           <v-icon 
@@ -186,6 +230,10 @@ async function handleLogout() {
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 /* Логотип */
@@ -255,6 +303,8 @@ async function handleLogout() {
 /* Навигация */
 .sidebar-nav {
   padding: 12px 16px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .nav-item {
@@ -297,6 +347,17 @@ async function handleLogout() {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: auto;
+}
+
+/* На мобильных делаем кнопку выхода sticky */
+@media (max-width: 960px) {
+  .sidebar-footer {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    z-index: 10;
+  }
 }
 
 .logout-button {
@@ -309,6 +370,27 @@ async function handleLogout() {
 .logout-button:hover {
   opacity: 1;
   background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Overlay для мобильных */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Адаптивность */

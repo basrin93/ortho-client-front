@@ -342,24 +342,32 @@ onUnmounted(() => {
 <template>
   <v-dialog v-model="dialog" max-width="1200" fullscreen>
     <v-card class="photos-dialog-card">
-      <v-card-title class="d-flex align-center justify-space-between pa-4">
-        <div class="d-flex align-center">
+      <v-card-title class="dialog-header-title">
+        <div class="dialog-header-left">
           <v-icon class="mr-2" color="primary">mdi-image-multiple</v-icon>
-          <span>Фото до лечения</span>
+          <span class="dialog-title-text">Фото до лечения</span>
           <v-chip v-if="photos.length > 0" size="small" class="ml-3" color="primary" variant="tonal">
             {{ photos.length }}
           </v-chip>
         </div>
-        <div class="d-flex align-center gap-2">
+        <div class="dialog-header-right">
           <v-btn
             color="primary"
             prepend-icon="mdi-camera"
             @click="fileInput?.click()"
             :disabled="!patient || !plan"
+            class="add-photo-btn"
+            size="small"
           >
-            Добавить фото
+            <span class="add-photo-text">Добавить</span>
           </v-btn>
-          <v-btn icon="mdi-close" variant="text" @click="close"></v-btn>
+          <v-btn 
+            icon="mdi-close" 
+            variant="text" 
+            @click="close"
+            class="close-dialog-btn"
+            size="small"
+          ></v-btn>
         </div>
       </v-card-title>
 
@@ -788,6 +796,115 @@ onUnmounted(() => {
 
 .thumbnails-container::-webkit-scrollbar-thumb:hover {
   background: #9e9e9e;
+}
+
+/* Заголовок диалога */
+.dialog-header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+  z-index: 10;
+  background: white;
+}
+
+.dialog-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.dialog-title-text {
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dialog-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.add-photo-btn {
+  flex-shrink: 0;
+}
+
+.add-photo-text {
+  display: inline;
+}
+
+.close-dialog-btn {
+  flex-shrink: 0;
+  min-width: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .dialog-header-title {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .dialog-header-left {
+    flex: 1 1 100%;
+    order: 1;
+    margin-bottom: 8px;
+  }
+
+  .dialog-header-right {
+    flex: 1 1 100%;
+    order: 2;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .add-photo-btn {
+    flex: 1;
+    max-width: calc(100% - 48px);
+  }
+
+  .add-photo-text {
+    display: inline;
+  }
+
+  .close-dialog-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 11;
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .dialog-title-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-photo-text {
+    display: none;
+  }
+
+  .add-photo-btn {
+    min-width: 40px !important;
+    width: 40px !important;
+    padding: 0 !important;
+  }
+
+  .add-photo-btn :deep(.v-btn__prepend) {
+    margin: 0 !important;
+  }
 }
 </style>
 

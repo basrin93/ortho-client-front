@@ -186,7 +186,8 @@ function toggleExpanded() {
 
 <style scoped>
 .templates-panel {
-  width: 320px;
+  width: 100%;
+  max-width: 320px;
   height: 100%;
   background: #fafafa;
   border-left: 1px solid #e0e0e0;
@@ -194,6 +195,15 @@ function toggleExpanded() {
   flex-direction: column;
   border-radius: 12px;
   overflow: hidden;
+}
+
+@media (max-width: 960px) {
+  .templates-panel {
+    max-width: 100%;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 12px;
+  }
 }
 
 .templates-header {

@@ -335,6 +335,41 @@ function onVisitCreated() {
   background: #f5f5f5;
   border-radius: 12px;
   margin-top: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.visit-notes span {
+  flex: 1;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.visit-notes .v-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.visit-notes::-webkit-scrollbar {
+  width: 6px;
+}
+
+.visit-notes::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.visit-notes::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.visit-notes::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .patient-filter {
@@ -357,6 +392,31 @@ function onVisitCreated() {
   
   .patient-filter {
     max-width: 100%;
+  }
+
+  .visit-notes {
+    max-height: 150px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .visit-card {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .visit-notes {
+    max-height: 120px;
+    padding: 10px;
+  }
+
+  .visit-date {
+    font-size: 16px;
+  }
+
+  .visit-time {
+    font-size: 12px;
   }
 }
 
